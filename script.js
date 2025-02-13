@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const canvas = document.getElementById("starsCanvas");
+  const canvas = document.getElementById("starfield");
   const ctx = canvas.getContext("2d");
   const textContainer = document.getElementById("text-container");
   const playButton = document.getElementById("playMessageButton");

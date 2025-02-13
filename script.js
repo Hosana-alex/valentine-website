@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 2 + 1,
+        radius: Math.random() * 2 + 0.5,
         speed: Math.random() * 0.5 + 0.2,
       });
     }
@@ -31,10 +31,18 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Twinkling effect
+      // Twinkling effect: Random movement
       star.radius += (Math.random() - 0.5) * 0.05;
       if (star.radius < 1) star.radius = 1;
       if (star.radius > 3) star.radius = 3;
+
+      // Optional: move stars slightly to create a subtle movement effect
+      star.x += star.speed;
+      star.y += star.speed;
+
+      // Wrap stars around if they go out of bounds
+      if (star.x > canvas.width) star.x = 0;
+      if (star.y > canvas.height) star.y = 0;
     });
 
     requestAnimationFrame(animateStars);
@@ -75,6 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("resize", function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    createStars(200);
+    createStars(200); // Recreate stars
   });
 });

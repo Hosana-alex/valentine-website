@@ -3,32 +3,47 @@ html, body {
     padding: 0 !important;
     overflow: hidden;
     cursor: url('./images/pointer.png'), auto;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
 canvas {
     width: 100%;
-    height: auto;
-    background: #111;
+    height: 100vh;
+    display: block;
 }
 
-#valentinesButton {
-    display: none;
+#playMessageButton {
     position: absolute;
-    background-color: #2d2dff;
-    border: 2px solid #2d2dff;
-    color: #fff;
-    cursor: pointer;
-    height: 50px;
-    font-size: 16px;
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    border-radius: 10px;
-    top: calc(50% + 150px); /* Adjust based on canvas height and text position */
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-  }
+    transform: translate(-50%, -50%);
+    padding: 15px 25px;
+    font-size: 18px;
+    background-color: #2d2dff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 10;
+}
 
-  #valentinesButton:hover {
+#playMessageButton:hover {
     background-color: #1f1faa;
-    color: #eee;
+}
+
+#text-container {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    display: none;
+    z-index: 5;
 }

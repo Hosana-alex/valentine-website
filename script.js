@@ -1,93 +1,80 @@
-var canvas = document.getElementById("starfield");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+document.addEventListener("DOMContentLoaded", function () {
+  const canvas = document.getElementById("starsCanvas");
+  const ctx = canvas.getContext("2d");
+  const textContainer = document.getElementById("text-container");
+  const playButton = document.getElementById("playMessageButton");
 
-var context = canvas.getContext("2d");
-var stars = 700; // Increased number of stars
-var colorrange = [0, 60, 240];
-var starArray = [];
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-// Function to get a random number within a range
-function getRandom(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+  let stars = [];
 
-// Initialize stars with random opacity values
-for (var i = 0; i < stars; i++) {
-  var x = Math.random() * canvas.offsetWidth;
-  var y = Math.random() * canvas.offsetHeight;
-  var radius = Math.random() * 1.2;
-  var hue = colorrange[getRandom(0, colorrange.length - 1)];
-  var sat = getRandom(50, 100);
-  var opacity = Math.random();
-  starArray.push({ x, y, radius, hue, sat, opacity });
-}
-
-var frameNumber = 0;
-var opacity = 0;
-
-// New text array
-var messages = [
-  "Hi my love",
-  "Everyday I cannot believe how lucky I am.",
-  "to have someone like you in my life,",
-  "you are the light that brightens my darkest days,",
-  "and the warmth that fills my heart with joy,",
-  "I love you more than words can express,",
-  "I love you in every way I know possible,",
-  "and I promise to cherish you forever",
-  "spooky😘",
-];
-
-var currentMessageIndex = 0;
-
-function drawStars() {
-  for (var i = 0; i < stars; i++) {
-    var star = starArray[i];
-
-    context.beginPath();
-    context.arc(star.x, star.y, star.radius, 0, 360);
-    context.fillStyle =
-      "hsla(" + star.hue + ", " + star.sat + "%, 88%, " + star.opacity + ")";
-    context.fill();
-  }
-}
-
-// Function to display text with fade-in and fade-out effect
-function drawText() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  drawStars();
-
-  var fontSize = Math.min(30, window.innerWidth / 24);
-  context.font = fontSize + "px Comic Sans MS";
-  context.textAlign = "center";
-  context.fillStyle = `rgba(255, 255, 255, ${opacity})`; // White text
-
-  context.fillText(
-    messages[currentMessageIndex],
-    canvas.width / 2,
-    canvas.height / 2
-  );
-
-  if (frameNumber < 100) {
-    opacity += 0.01; // Fade in
-  } else if (frameNumber >= 200) {
-    opacity -= 0.01; // Fade out
-  }
-
-  if (opacity <= 0 && frameNumber > 200) {
-    frameNumber = 0;
-    opacity = 0;
-    currentMessageIndex++;
-
-    if (currentMessageIndex >= messages.length) {
-      currentMessageIndex = 0; // Loop back to the first message
+  // Create stars
+  function createStars(count) {
+    stars = [];
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 1,
+        speed: Math.random() * 0.5 + 0.2,
+      });
     }
   }
 
-  frameNumber++;
-  requestAnimationFrame(drawText);
-}
+  function animateStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
 
-// Start animation
-drawText();
+    stars.forEach((star) => {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Twinkling effect
+      star.radius += (Math.random() - 0.5) * 0.05;
+      if (star.radius < 1) star.radius = 1;
+      if (star.radius > 3) star.radius = 3;
+    });
+
+    requestAnimationFrame(animateStars);
+  }
+
+  createStars(200); // Number of stars
+  animateStars();
+
+  // Messages
+  const messages = [
+    "Hi my love",
+    "Everyday I cannot believe how lucky I am.",
+    "To have someone like you in my life,",
+    "You are the light that brightens my darkest days,",
+    "And the warmth that fills my heart with joy,",
+    "I love you more than words can express,",
+    "I love you in every way I know possible,",
+    "And I promise to cherish you forever",
+    "Spooky😘",
+  ];
+
+  let index = 0;
+
+  function showNextMessage() {
+    if (index < messages.length) {
+      textContainer.innerText = messages[index];
+      index++;
+      setTimeout(showNextMessage, 3000); // Adjust duration per message
+    }
+  }
+
+  playButton.addEventListener("click", function () {
+    playButton.style.display = "none"; // Hide button
+    textContainer.style.display = "block"; // Show text
+    showNextMessage(); // Start message display
+  });
+
+  window.addEventListener("resize", function () {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    createStars(200);
+  });
+});
